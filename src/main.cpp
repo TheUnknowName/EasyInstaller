@@ -1,7 +1,8 @@
-#include <iostream>
+#include <fmt/core.h>
+#include <string>
 
-int main()
-{
-    std::cout << "Hello world!" << std::endl;
-    return 0;
+int main() {
+std::string world = fmt::format("Hello {}", "World");
+fmt::print("{}", world);
+return 0;
 }
