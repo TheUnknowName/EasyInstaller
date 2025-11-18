@@ -68,3 +68,9 @@ build
 *.dwo
 
 ### C++ 相关 gitignore end
+
+### vcpkg 相关 gitignore start
+
+vcpkg_installed
+
+### vcpkg 相关 gitignore end
