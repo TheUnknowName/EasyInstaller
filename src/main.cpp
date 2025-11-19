@@ -7,6 +7,8 @@
 // - Documentation        https://dearimgui.com/docs (same as your local docs/ folder).
 // - Introduction, links and more at the top of imgui.cpp
 
+#include "Win/System/Environment.hpp"
+
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
@@ -38,6 +40,8 @@ static void glfw_error_callback(int error, const char* description)
 // Main code
 int main(int, char**)
 {
+    const std::string& root = Installer::Win::System::Environment::GetSystemRoot();
+
     glfwSetErrorCallback(glfw_error_callback);
     if (!glfwInit())
         return 1;
@@ -113,6 +117,29 @@ int main(int, char**)
     //ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, nullptr, io.Fonts->GetGlyphRangesJapanese());
     //IM_ASSERT(font != nullptr);
 
+     // 清除默认字体
+    io.Fonts->Clear();
+    
+    // 直接指定常见的中文字体路径
+    const char* fontPaths[] = {
+        "C:/Windows/Fonts/msyh.ttc",      // 微软雅黑
+        "C:/Windows/Fonts/simhei.ttf",    // 黑体
+        "C:/Windows/Fonts/simsun.ttc",    // 宋体
+    };
+    
+    ImFont* font = nullptr;
+    for (const char* path : fontPaths) {
+        font = io.Fonts->AddFontFromFileTTF(path, 18.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
+        if (font) break;
+    }
+    
+    // 如果上面的字体都没找到，回退到默认字体
+    if (!font) {
+        font = io.Fonts->AddFontDefault();
+    }
+    
+    io.Fonts->Build();
+
     // Our state
     bool show_demo_window = true;
     bool show_another_window = false;
@@ -156,7 +183,7 @@ int main(int, char**)
 
             ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
 
-            ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
+            ImGui::Text("这是一个自己使用的文本.");               // Display some text (you can use a format strings too)
             ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
             ImGui::Checkbox("Another Window", &show_another_window);
 
